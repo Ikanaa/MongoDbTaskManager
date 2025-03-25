@@ -9,5 +9,69 @@
 </head>
 <body>
     <h1>HELLO WORLD</h1>
+    <div class="flex-column flex_center size-quarter">
+        <h2 class="center-text">Nouvelle Tache</h2>
+        <table>
+            <tr>
+                <th> </th>
+                <th> </th>
+            </tr>
+            <tr>
+                <td>Titre</td>
+                <td><input type="text" id="titre" name="titre" placeholder="Titre"></td>
+            </tr>
+            <tr>
+                <td>Description</td>
+                <td><textarea id="description" name="description" placeholder="..."></textarea></td>
+            </tr>
+            <tr>
+                <td>Date de création</td>
+                <td><input type="date" id="dateCreation" name="dateCreation"></td>
+            </tr>
+            <tr>
+                <td>Statut</td>
+                <td>
+                    <select id="statut" name="statut">
+                        <option value="à faire">À faire</option>
+                        <option value="en cours">En cours</option>
+                        <option value="terminée">Terminée</option>
+                        <option value="annulée">Annulée</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>Priorité</td>
+                <td>
+                    <select id="priorite" name="priorite">
+                        <option value="basse">Basse</option>
+                        <option value="moyenne">Moyenne</option>
+                        <option value="haute">Haute</option>
+                        <option value="critique">Critique</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Auteur
+                </td>
+                <td class="flex-column">
+                    <input type="text" id="auteur.nom" name="auteur.nom" placeholder="Nom">
+                    <input type="text" id="auteur.prenom" name="auteur.prenom" placeholder="Prénom">
+                    <input type="text" id="auteur.email" name="auteur.email" placeholder="Email">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Etiquettes
+                </td>
+                <td class="flex-column">
+                    <div><input class="size-87" type="text" id="etiquettes1" name="etiquettes1" placeholder="Etiquettes1"><button class="size-10">-</button></div>
+                    <div><input class="size-87" type="text" id="etiquettes2" name="etiquettes2" placeholder="Etiquettes2"><button class="size-10">-</button></div>
+                    <button value="">+</button>
+                </td>
+            </tr>
+        </table>
+        <button onclick="ajouterTache()">Ajouter</button>
+    </div>
 </body>
 </html>

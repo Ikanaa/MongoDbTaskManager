@@ -5,3 +5,56 @@ body {
     margin: 0;
     padding: 0;
 }
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-row {
+    display: flex;
+    flex-direction: row;
+}
+
+.flex-center {
+    align-items: center;
+    justify-content: center;
+}
+
+.flex-left {
+    align-items: start;
+    justify-content: flex-start;
+}
+
+.flex-right {
+    align-items: end;
+    justify-content: flex-end;
+}
+
+.size-full {
+    width: 100%;
+}
+
+.size-half {
+    width: 50%;
+}
+
+.size-quarter {
+    width: 25%;
+}
+
+.size-87 {
+    width: 87%;
+}
+
+.size-10 {
+    width: 10%;
+}
+
+.center-text {
+    text-align: center;
+}
+
+.t {
+    background-color: black;
+}
