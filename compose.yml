@@ -1,0 +1,42 @@
+services:
+  api:
+    build:
+      context: ./API
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017/taskmanager
+    depends_on:
+      - mongodb
+    networks:
+      - app-network
+
+  mongodb:
+    build:
+      context: ./MONGODB
+      dockerfile: Dockerfile
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - app-network
+
+  web:
+    build:
+      context: ./WEB
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
