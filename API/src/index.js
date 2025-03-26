@@ -65,13 +65,9 @@ app.get('/tasks/:id', async (req, res) => {
 // Create task
 app.post('/tasks', async (req, res) => {
     try {
-
-        console.log(req.body);
         const task = new Task(req.body);
-        console.log("Task format :");
-        console.log(task);
-        //const savedTask = await task.save();
-        //res.status(201).json(savedTask);
+        const savedTask = await task.save();
+        res.status(201).json(savedTask);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }

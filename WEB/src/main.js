@@ -33,8 +33,7 @@ function AddNewTask(button)
         newTask.etiquettes.push(element.children[0].value);
     }
 
-    console.log(newTask);
-
+    
     fetch('http://localhost:3000/tasks', {
         method: 'POST',
         headers: {
