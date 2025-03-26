@@ -20,17 +20,24 @@ mongoose.connect(MONGODB_URI)
 
 // Define Task Schema
 const taskSchema = new mongoose.Schema({
-    title: { type: String, required: true },
+    titre: { type: String, required: true },
     description: { type: String },
-    completed: { type: Boolean, default: false },
-    createdAt: { type: Date, default: Date.now }
+    status: { type: String, enum: ["à faire", "en cours", "terminée", "annulée"], default: 'à faire', required: true},
+    priorite: { type: String, enum: ["basse", "moyenne", "haute", "critique"], default: 'basse' },
+    echeance: { type: Date },
+    dateCreation: { type: Date, default: Date.now, required: true},
+    etiquettes: { type: [String] },
+    auteur: {
+        nom: { type: String, default: 'anon' },
+        prenom: { type: String, default: 'anon' },
+        email: { type: String, default: 'anon' }
+    }
 });
 
 const Task = mongoose.model('Task', taskSchema);
 
 // Routes
 app.get('/', (req, res) => {
-    console.log('GET /');
     res.send('Task Manager API is running');
 });
 
@@ -58,9 +65,13 @@ app.get('/tasks/:id', async (req, res) => {
 // Create task
 app.post('/tasks', async (req, res) => {
     try {
+
+        console.log(req.body);
         const task = new Task(req.body);
-        const savedTask = await task.save();
-        res.status(201).json(savedTask);
+        console.log("Task format :");
+        console.log(task);
+        //const savedTask = await task.save();
+        //res.status(201).json(savedTask);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }

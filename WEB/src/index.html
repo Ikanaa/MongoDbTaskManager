@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
+    <script src="main.js"></script>
     <title>MongoDB Task Manager</title>
 </head>
 <body>
@@ -18,20 +18,20 @@
             </tr>
             <tr>
                 <td>Titre</td>
-                <td><input type="text" id="titre" name="titre" placeholder="Titre"></td>
+                <td><input type="text" id="create_titre" placeholder="Titre"></td>
             </tr>
             <tr>
                 <td>Description</td>
-                <td><textarea id="description" name="description" placeholder="..."></textarea></td>
+                <td><textarea id="create_description" placeholder="..."></textarea></td>
             </tr>
             <tr>
-                <td>Date de création</td>
-                <td><input type="date" id="dateCreation" name="dateCreation"></td>
+                <td>Date d'Échéance</td>
+                <td><input type="datetime-local" id="create_echeance"></td>
             </tr>
             <tr>
                 <td>Statut</td>
                 <td>
-                    <select id="statut" name="statut">
+                    <select id="create_status">
                         <option value="à faire">À faire</option>
                         <option value="en cours">En cours</option>
                         <option value="terminée">Terminée</option>
@@ -42,7 +42,7 @@
             <tr>
                 <td>Priorité</td>
                 <td>
-                    <select id="priorite" name="priorite">
+                    <select id="create_priorite">
                         <option value="basse">Basse</option>
                         <option value="moyenne">Moyenne</option>
                         <option value="haute">Haute</option>
@@ -55,9 +55,9 @@
                     Auteur
                 </td>
                 <td class="flex-column">
-                    <input type="text" id="auteur.nom" name="auteur.nom" placeholder="Nom">
-                    <input type="text" id="auteur.prenom" name="auteur.prenom" placeholder="Prénom">
-                    <input type="text" id="auteur.email" name="auteur.email" placeholder="Email">
+                    <input type="text" id="create_auteur_nom" placeholder="Nom">
+                    <input type="text" id="create_auteur_prenom" placeholder="Prénom">
+                    <input type="text" id="create_auteur_email" placeholder="Email">
                 </td>
             </tr>
             <tr>
@@ -65,13 +65,13 @@
                     Etiquettes
                 </td>
                 <td class="flex-column">
-                    <div><input class="size-87" type="text" id="etiquettes1" name="etiquettes1" placeholder="Etiquettes1"><button class="size-10">-</button></div>
-                    <div><input class="size-87" type="text" id="etiquettes2" name="etiquettes2" placeholder="Etiquettes2"><button class="size-10">-</button></div>
-                    <button value="">+</button>
+                    <div id="create_label_container">
+                    </div>
+                    <button value="" onclick="PlusLabelTask(this, 'create_label_container')">+</button>
                 </td>
             </tr>
         </table>
-        <button onclick="ajouterTache()">Ajouter</button>
+        <button onclick="AddNewTask(this)">Ajouter</button>
     </div>
 </body>
 </html>
