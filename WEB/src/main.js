@@ -45,6 +45,44 @@ function AddNewTask(button)
 }
 
 
+// --------------------------------------------
+// --- Fetch and display Tasks ---
+// --------------------------------------------
+
+function DisplayTasks()
+{
+    const taskDiv = document.getElementById("task_container");
+    
+    let div = document.createElement('div');
+
+    div.innerHTML = `<div class="m-1">
+                <table>
+                    <tr>
+                        <th>TASK</th>
+                    </tr>
+                    <tr>
+                        <td>Titre</td>
+                    </tr>
+                    <tr>
+                        <td>Description</td>
+                    </tr>
+                    <tr>
+                        <td>Date d'Échéance</td>
+                    </tr>
+                    <tr>
+                        <td>Statut</td>
+                    </tr>
+                    <tr>
+                        <td>Priorité</td>
+                    </tr>
+                    <tr>
+                        <td>Auteur</td>
+                    </tr>
+                </table>
+                </div>`;
+
+    taskDiv.appendChild(div);
+}
 
 // --------------------------------------------
 // --- Gestion Label Task ---
@@ -79,4 +117,18 @@ function PlusLabelTask(button, idContainer)
     div.appendChild(divLabel);
 
     divLabel.children[0].focus();
+}
+
+
+
+// --------------------------------------------
+// --- On Start ---
+// --------------------------------------------
+
+
+function DebugDisplay()
+{
+    for (let i = 0; i < 30; i++) {
+        DisplayTasks();
+    }
 }
