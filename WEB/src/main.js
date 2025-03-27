@@ -9,6 +9,7 @@ function AddNewTask(button)
     const echeance = document.getElementById('create_echeance');
     const status = document.getElementById('create_status');
     const priorite = document.getElementById('create_priorite');
+    const categorie = document.getElementById('create_categorie');
     const auteur_nom = document.getElementById('create_auteur_nom');
     const auteur_prenom = document.getElementById('create_auteur_prenom');
     const auteur_email = document.getElementById('create_auteur_email');
@@ -20,6 +21,7 @@ function AddNewTask(button)
         echeance: echeance.value,
         status: status.value,
         priorite: priorite.value,
+        categorie: categorie.value,
         auteur: {
             nom: auteur_nom.value || "anon",
             prenom: auteur_prenom.value || "anon",
@@ -55,31 +57,52 @@ function DisplayTasks()
     
     let div = document.createElement('div');
 
-    div.innerHTML = `<div class="m-1">
-                <table>
-                    <tr>
-                        <th>TASK</th>
-                    </tr>
-                    <tr>
-                        <td>Titre</td>
-                    </tr>
-                    <tr>
-                        <td>Description</td>
-                    </tr>
-                    <tr>
-                        <td>Date d'Échéance</td>
-                    </tr>
-                    <tr>
-                        <td>Statut</td>
-                    </tr>
-                    <tr>
-                        <td>Priorité</td>
-                    </tr>
-                    <tr>
-                        <td>Auteur</td>
-                    </tr>
-                </table>
-                </div>`;
+    div.innerHTML = `<div class="task" onclick="console.log('test')">
+                        <div class="task_head">
+                            <div class="m-demi">
+                                <h3 class="m-t-1 center-text m-0">TASK</h3>
+                            </div>
+                            <div class="m-demi">
+                                <p class="m-0">Une tache qui demande beaucoup de reflexion a l'évidence ...</p>
+                            </div>
+                            <div class="m-demi">
+                                <p class="m-0">29/01/2004</p>
+                            </div>
+                        </div>
+
+                        <div class="m-t-1 flex-row">
+                            <p class="m-0 m-r-1">
+                                Status:
+                            </p>
+                            <p class="m-0">
+                                À faire
+                            </p>
+                        </div>
+                        <div class="m-t-1 flex-row">
+                            <p class="m-0 m-r-1">
+                                priorité:
+                            </p>
+                            <p class="m-0">
+                                Basse
+                            </p>
+                        </div>
+                        <div class="m-t-1 flex-row">
+                            <p class="m-0 m-r-1">
+                                Auteur:
+                            </p>
+                            <p class="m-0">
+                                louis saffré louis.saffre@gmail.com
+                            </p>
+                        </div>
+                        <div class="m-t-1 flex-row">
+                            <p class="m-0 m-r-1">
+                                categorie:
+                            </p>
+                            <p class="m-0">
+                                perso
+                            </p>
+                        </div>
+                    </div>`;
 
     taskDiv.appendChild(div);
 }

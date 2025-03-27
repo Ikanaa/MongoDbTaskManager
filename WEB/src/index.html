@@ -10,44 +10,65 @@
 <body>
     <h1>MongoDB Task Manager</h1>
     <div class="flex-row">
+        <button onclick="document.getElementById('create_popup').className = 'popup';">Créer Tache</button>
+    </div>
+    <div class="flex-row">
         <div>
             <div class="size-a block" id="task_container">
-                <div class="m-1">
-                    <table>
-                        <tr>
-                            <th>TASK</th>
-                        </tr>
-                        <tr>
-                            <td>Titre</td>
-                        </tr>
-                        <tr>
-                            <td>Description</td>
-                        </tr>
-                        <tr>
-                            <td>Date d'Échéance</td>
-                        </tr>
-                        <tr>
-                            <td>Statut</td>
-                        </tr>
-                        <tr>
-                            <td>Priorité</td>
-                        </tr>
-                        <tr>
-                            <td>Auteur</td>
-                        </tr>
-                    </table>
+                <div class="task" onclick="console.log('test')">
+                    <div class="task_head">
+                        <div class="m-demi">
+                            <h3 class="m-t-1 center-text m-0">TASK</h3>
+                        </div>
+                        <div class="m-demi">
+                            <p class="m-0">Une tache qui demande beaucoup de reflexion a l'évidence ...</p>
+                        </div>
+                        <div class="m-demi">
+                            <p class="m-0">29/01/2004</p>
+                        </div>
+                    </div>
+
+                    <div class="m-t-1 flex-row">
+                        <p class="m-0 m-r-1">
+                            Status:
+                        </p>
+                        <p class="m-0">
+                            À faire
+                        </p>
+                    </div>
+                    <div class="m-t-1 flex-row">
+                        <p class="m-0 m-r-1">
+                            priorité:
+                        </p>
+                        <p class="m-0">
+                            Basse
+                        </p>
+                    </div>
+                    <div class="m-t-1 flex-row">
+                        <p class="m-0 m-r-1">
+                            Auteur:
+                        </p>
+                        <p class="m-0">
+                            louis saffré louis.saffre@gmail.com
+                        </p>
+                    </div>
+                    <div class="m-t-1 flex-row">
+                        <p class="m-0 m-r-1">
+                            categorie:
+                        </p>
+                        <p class="m-0">
+                            perso
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="popup">
-        <div class="flex-column flex_center size-quarter">
+    <div class="hidden" id="create_popup">
+        <button onclick="document.getElementById('create_popup').className = 'hidden';">X</button>
+        <div class="flex-column flex_center size-full">
             <h2 class="center-text size-full">Nouvelle Tache</h2>
-            <table>
-                <tr>
-                    <th> </th>
-                    <th> </th>
-                </tr>
+            <table class="size-full">
                 <tr>
                     <td>Titre</td>
                     <td><input type="text" id="create_titre" placeholder="Titre"></td>
@@ -83,6 +104,10 @@
                     </td>
                 </tr>
                 <tr>
+                    <td>Categorie</td>
+                    <td><input type="text" id="create_categorie" placeholder="Travail"></td>
+                </tr>
+                <tr>
                     <td>
                         Auteur
                     </td>
@@ -103,7 +128,7 @@
                     </td>
                 </tr>
             </table>
-            <button onclick="AddNewTask(this)">Ajouter</button>
+            <button class="size-full" onclick="AddNewTask(this)">Ajouter</button>
         </div>
     </div>
 </body>
