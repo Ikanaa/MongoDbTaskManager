@@ -10,57 +10,12 @@
 <body>
     <h1>MongoDB Task Manager</h1>
     <div class="flex-row">
-        <button onclick="document.getElementById('create_popup').className = 'popup';">Créer Tache</button>
+        <button onclick="document.getElementById('create_popup').className = 'popup';document.getElementById('modif_popup').className = 'hidden';">Créer Tache</button>
     </div>
     <div class="flex-row">
         <div>
             <div class="size-a block" id="task_container">
-                <div class="task" onclick="console.log('test')">
-                    <div class="task_head">
-                        <div class="m-demi">
-                            <h3 class="m-t-1 center-text m-0">TASK</h3>
-                        </div>
-                        <div class="m-demi">
-                            <p class="m-0">Une tache qui demande beaucoup de reflexion a l'évidence ...</p>
-                        </div>
-                        <div class="m-demi">
-                            <p class="m-0">29/01/2004</p>
-                        </div>
-                    </div>
-
-                    <div class="m-t-1 flex-row">
-                        <p class="m-0 m-r-1">
-                            Status:
-                        </p>
-                        <p class="m-0">
-                            À faire
-                        </p>
-                    </div>
-                    <div class="m-t-1 flex-row">
-                        <p class="m-0 m-r-1">
-                            priorité:
-                        </p>
-                        <p class="m-0">
-                            Basse
-                        </p>
-                    </div>
-                    <div class="m-t-1 flex-row">
-                        <p class="m-0 m-r-1">
-                            Auteur:
-                        </p>
-                        <p class="m-0">
-                            louis saffré louis.saffre@gmail.com
-                        </p>
-                    </div>
-                    <div class="m-t-1 flex-row">
-                        <p class="m-0 m-r-1">
-                            categorie:
-                        </p>
-                        <p class="m-0">
-                            perso
-                        </p>
-                    </div>
-                </div>
+                
             </div>
         </div>
     </div>
@@ -70,7 +25,7 @@
             <h2 class="center-text size-full">Nouvelle Tache</h2>
             <table class="size-full">
                 <tr>
-                    <td>Titre</td>
+                    <td>Titre*</td>
                     <td><input type="text" id="create_titre" placeholder="Titre"></td>
                 </tr>
                 <tr>
@@ -78,7 +33,7 @@
                     <td><textarea id="create_description" placeholder="..."></textarea></td>
                 </tr>
                 <tr>
-                    <td>Date d'Échéance</td>
+                    <td>Date d'Échéance*</td>
                     <td><input type="datetime-local" id="create_echeance"></td>
                 </tr>
                 <tr>
@@ -129,6 +84,74 @@
                 </tr>
             </table>
             <button class="size-full" onclick="AddNewTask(this)">Ajouter</button>
+        </div>
+    </div>
+    <div class="hidden" id="modif_popup">
+        <button onclick="document.getElementById('modif_popup').className = 'hidden';">X</button>
+        <div class="flex-column flex_center size-full">
+            <h2 class="center-text size-full">Modifier Tache</h2>
+            <h4 class="center-text size-full">ID</h4>
+            <table class="size-full">
+                <tr>
+                    <td>Titre*</td>
+                    <td><input type="text" id="modif_titre" placeholder="Titre"></td>
+                </tr>
+                <tr>
+                    <td>Description</td>
+                    <td><textarea id="modif_description" placeholder="..."></textarea></td>
+                </tr>
+                <tr>
+                    <td>Date d'Échéance*</td>
+                    <td><input type="datetime-local" id="modif_echeance"></td>
+                </tr>
+                <tr>
+                    <td>Statut</td>
+                    <td>
+                        <select id="modif_status">
+                            <option value="à faire">À faire</option>
+                            <option value="en cours">En cours</option>
+                            <option value="terminée">Terminée</option>
+                            <option value="annulée">Annulée</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Priorité</td>
+                    <td>
+                        <select id="modif_priorite">
+                            <option value="basse">Basse</option>
+                            <option value="moyenne">Moyenne</option>
+                            <option value="haute">Haute</option>
+                            <option value="critique">Critique</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Categorie</td>
+                    <td><input type="text" id="modif_categorie" placeholder="Travail"></td>
+                </tr>
+                <tr>
+                    <td>
+                        Auteur
+                    </td>
+                    <td class="flex-column">
+                        <input type="text" id="modif_auteur_nom" placeholder="Nom">
+                        <input type="text" id="modif_auteur_prenom" placeholder="Prénom">
+                        <input type="text" id="modif_auteur_email" placeholder="Email">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Etiquettes
+                    </td>
+                    <td class="flex-column">
+                        <div id="modif_label_container">
+                        </div>
+                        <button value="" onclick="PlusLabelTask(this, 'modif_label_container')">+</button>
+                    </td>
+                </tr>
+            </table>
+            <button class="size-full" onclick="ModifTask(this)" id="modif_button">Modifier</button>
         </div>
     </div>
 </body>

@@ -1,6 +1,22 @@
+// --------------------------------------------
+// --- Utils ---
+// --------------------------------------------
 
+function FormatteDate(InputDate)
+{
+    const date = new Date(InputDate);
+    return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+}
 
+function FormatteDateInput(InputDate)
+{
+    const date = new Date(InputDate);
+    return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate().toString().padStart(2, '0')}T${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`;
+}
 
+// --------------------------------------------
+// --- Create new Task ---
+// --------------------------------------------
 
 function AddNewTask(button)
 {
@@ -24,8 +40,8 @@ function AddNewTask(button)
         categorie: categorie.value,
         auteur: {
             nom: auteur_nom.value || "anon",
-            prenom: auteur_prenom.value || "anon",
-            email: auteur_email.value || "anon"
+            prenom: auteur_prenom.value || "",
+            email: auteur_email.value || ""
         },
         etiquettes: []
     };
@@ -43,30 +59,136 @@ function AddNewTask(button)
         },
         body: JSON.stringify(newTask)
     })
-    .then(response => console.log(response))
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        else {
+            document.getElementById('create_popup').className = 'hidden';
+            FetchAllTasks();
+        }
+        return;
+    })
 }
 
+// --------------------------------------------
+// --- Modif Task ---
+// --------------------------------------------
+
+function OpenModifPopup(id)
+{
+    document.getElementById('create_popup').className = 'hidden';
+
+    const button = document.getElementById('modif_button').value = id;
+    const titre = document.getElementById('modif_titre');
+    const description = document.getElementById('modif_description');
+    const echeance = document.getElementById('modif_echeance');
+    const status = document.getElementById('modif_status');
+    const priorite = document.getElementById('modif_priorite');
+    const categorie = document.getElementById('modif_categorie');
+    const auteur_nom = document.getElementById('modif_auteur_nom');
+    const auteur_prenom = document.getElementById('modif_auteur_prenom');
+    const auteur_email = document.getElementById('modif_auteur_email');
+    const label_container = document.getElementById('modif_label_container');
+
+
+    fetch('http://localhost:3000/tasks/' + id)
+    .then(response => response.json())
+    .then(data => {
+        titre.value = data.titre;
+        description.value = data.description;
+        echeance.value = FormatteDateInput(data.echeance);
+        status.value = data.status;
+        priorite.value = data.priorite;
+        categorie.value = data.categorie;
+        auteur_nom.value = data.auteur.nom;
+        auteur_prenom.value = data.auteur.prenom;
+        auteur_email.value = data.auteur.email;
+        document.getElementById('modif_popup').className = 'popup';
+    });
+}
+
+function ModifTask(button)
+{
+    const titre = document.getElementById('modif_titre');
+    const description = document.getElementById('modif_description');
+    const echeance = document.getElementById('modif_echeance');
+    const status = document.getElementById('modif_status');
+    const priorite = document.getElementById('modif_priorite');
+    const categorie = document.getElementById('modif_categorie');
+    const auteur_nom = document.getElementById('modif_auteur_nom');
+    const auteur_prenom = document.getElementById('modif_auteur_prenom');
+    const auteur_email = document.getElementById('modif_auteur_email');
+    const label_container = document.getElementById('modif_label_container');
+
+    let newTask = {
+        titre: titre.value,
+        description: description.value,
+        echeance: echeance.value,
+        status: status.value,
+        priorite: priorite.value,
+        categorie: categorie.value,
+        auteur: {
+            nom: auteur_nom.value || "anon",
+            prenom: auteur_prenom.value || "",
+            email: auteur_email.value || ""
+        },
+        etiquettes: []
+    };
+
+    for (var i = 0; i < label_container.children.length; i++) {
+        const element = label_container.children[i];
+        newTask.etiquettes.push(element.children[0].value);
+    }
+
+    
+    fetch('http://localhost:3000/tasks/' + button.value, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newTask)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        else {
+            document.getElementById('modif_popup').className = 'hidden';
+            FetchAllTasks();
+        }
+        return;
+    })
+}
 
 // --------------------------------------------
 // --- Fetch and display Tasks ---
 // --------------------------------------------
 
-function DisplayTasks()
+function ClearDisplayTasks()
+{
+    const taskDiv = document.getElementById("task_container");
+    if (taskDiv) 
+        taskDiv.innerHTML = '';
+}
+
+function DisplayTasks(task)
 {
     const taskDiv = document.getElementById("task_container");
     
     let div = document.createElement('div');
 
-    div.innerHTML = `<div class="task" onclick="console.log('test')">
+
+    div.innerHTML = `<div class="task" onclick="OpenModifPopup('${task._id}')">
                         <div class="task_head">
-                            <div class="m-demi">
-                                <h3 class="m-t-1 center-text m-0">TASK</h3>
+                            <div class="m-demi m-y-1">
+                                <h3 class="center-text m-0">${task.titre}</h3>
                             </div>
-                            <div class="m-demi">
-                                <p class="m-0">Une tache qui demande beaucoup de reflexion a l'évidence ...</p>
+                            <div class="m-demi" style="max-height: 4em; overflow-y: auto; border: 1px solid #AAA; padding: 0.5em; border-radius: 0.5em;">
+                                <p class="m-0">${task.description}</p>
                             </div>
-                            <div class="m-demi">
-                                <p class="m-0">29/01/2004</p>
+                            <div class="m-demi m-y-1">
+                                <p class="m-0">${FormatteDate(task.dateCreation)}</p>
                             </div>
                         </div>
 
@@ -75,7 +197,7 @@ function DisplayTasks()
                                 Status:
                             </p>
                             <p class="m-0">
-                                À faire
+                                ${task.status}
                             </p>
                         </div>
                         <div class="m-t-1 flex-row">
@@ -83,7 +205,7 @@ function DisplayTasks()
                                 priorité:
                             </p>
                             <p class="m-0">
-                                Basse
+                                ${task.priorite}
                             </p>
                         </div>
                         <div class="m-t-1 flex-row">
@@ -91,20 +213,42 @@ function DisplayTasks()
                                 Auteur:
                             </p>
                             <p class="m-0">
-                                louis saffré louis.saffre@gmail.com
+                                ${task.auteur.nom} ${task.auteur.prenom} ${task.auteur.email}
                             </p>
                         </div>
                         <div class="m-t-1 flex-row">
                             <p class="m-0 m-r-1">
-                                categorie:
+                                Categorie:
                             </p>
                             <p class="m-0">
-                                perso
+                                ${task.categorie}
+                            </p>
+                        </div>
+                        <div class="m-t-1 flex-row">
+                            <p class="m-0 m-r-1">
+                                Echéance:
+                            </p>
+                            <p class="m-0">
+                                ${FormatteDate(task.echeance)}
                             </p>
                         </div>
                     </div>`;
 
     taskDiv.appendChild(div);
+}
+
+function FetchAllTasks()
+{
+    ClearDisplayTasks();
+
+    fetch('http://localhost:3000/tasks')
+        .then(response => response.json())
+        .then(data => {
+            data.forEach(task => {
+                DisplayTasks(task);
+            });
+        })
+        .catch(error => console.error('Error fetching tasks:', error));
 }
 
 // --------------------------------------------
@@ -151,7 +295,19 @@ function PlusLabelTask(button, idContainer)
 
 function DebugDisplay()
 {
-    for (let i = 0; i < 30; i++) {
-        DisplayTasks();
-    }
+    const task = {
+        title: "Finir le projet MongoDB",
+        description: "Implémenter les fonctionnalités CRUD pour l'application de gestion de tâches",
+        dateCreation: "2023-11-15",
+        statut: "En cours",
+        priorite: "Haute",
+        nom: "Dupont",
+        prenom: "Jean",
+        email: "jean.dupont@example.com",
+        categorie: "Développement"
+    };
+
+    DisplayTasks(task);
 }
+
+FetchAllTasks();

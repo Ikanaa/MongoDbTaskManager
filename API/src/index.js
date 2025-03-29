@@ -24,13 +24,14 @@ const taskSchema = new mongoose.Schema({
     description: { type: String },
     status: { type: String, enum: ["à faire", "en cours", "terminée", "annulée"], default: 'à faire', required: true},
     priorite: { type: String, enum: ["basse", "moyenne", "haute", "critique"], default: 'basse' },
+    categorie: { type: String, default: 'autre' },
     echeance: { type: Date },
     dateCreation: { type: Date, default: Date.now, required: true},
     etiquettes: { type: [String] },
     auteur: {
         nom: { type: String, default: 'anon' },
-        prenom: { type: String, default: 'anon' },
-        email: { type: String, default: 'anon' }
+        prenom: { type: String, default: '' },
+        email: { type: String, default: '' }
     }
 });
 
