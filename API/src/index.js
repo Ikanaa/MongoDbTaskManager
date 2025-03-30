@@ -32,6 +32,17 @@ const taskSchema = new mongoose.Schema({
         nom: { type: String, default: 'anon' },
         prenom: { type: String, default: '' },
         email: { type: String, default: '' }
+    },
+    commentaires: {
+        type: [{
+            auteur: {
+                nom: { type: String, default: 'anon' },
+                prenom: { type: String, default: '' },
+                email: { type: String, default: '' }
+            },
+            contenu: { type: String, required: true },
+            date: { type: Date, default: Date.now }
+        }]
     }
 });
 
@@ -89,6 +100,20 @@ app.put('/tasks/:id', async (req, res) => {
     }
 });
 
+// Add Comment to Task
+app.post('/tasks/:id/comment', async (req, res) => {
+    try {
+        const task = await Task.findById(req.params.id);
+        if (!task) return res.status(404).json({ message: 'Task not found' });
+        
+        task.commentaires.push(req.body);
+        await task.save();
+        res.status(201).json(task);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
+
 // Delete task
 app.delete('/tasks/:id', async (req, res) => {
     try {
@@ -96,6 +121,22 @@ app.delete('/tasks/:id', async (req, res) => {
         if (!task) return res.status(404).json({ message: 'Task not found' });
         res.json({ message: 'Task deleted successfully' });
     } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+});
+
+// Delete comment from task
+app.delete('/tasks/:taskId/comment/:commentId', async (req, res) => {
+    try {
+        const task = await Task.findById(req.params.taskId);
+        if (!task) return res.status(404).json({ message: 'Task not found' });
+        
+        task.commentaires.pull({ _id: req.params.commentId });
+
+        await task.save();
+        res.json({ message: 'Comment deleted successfully' });
+    } catch (error) {
+        console.error(error);
         res.status(500).json({ message: error.message });
     }
 });

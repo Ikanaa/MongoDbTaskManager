@@ -10,7 +10,8 @@
 <body>
     <h1>MongoDB Task Manager</h1>
     <div class="flex-row">
-        <button onclick="document.getElementById('create_popup').className = 'popup';document.getElementById('modif_popup').className = 'hidden';">Créer Tache</button>
+        <button onclick="document.getElementById('create_popup').className = 'popup';document.getElementById('modif_popup').className = 'hidden';
+        document.getElementById('comment_popup').className = 'hidden';">Créer Tache</button>
     </div>
     <div class="flex-row">
         <div>
@@ -87,7 +88,7 @@
         </div>
     </div>
     <div class="hidden" id="modif_popup">
-        <button onclick="document.getElementById('modif_popup').className = 'hidden';">X</button>
+        <button onclick="HideModifPopup()">X</button>
         <div class="flex-column flex_center size-full">
             <h2 class="center-text size-full">Modifier Tache</h2>
             <h4 class="center-text size-full">ID</h4>
@@ -151,7 +152,28 @@
                     </td>
                 </tr>
             </table>
-            <button class="size-full" onclick="ModifTask(this)" id="modif_button">Modifier</button>
+            <button class="size-full m-y-1" onclick="ModifTask(this)" id="modif_button">Modifier</button>
+            <button class="size-full" onclick="DeleteTask(this)" id="delete_button">Supprimer</button>
+        </div>
+    </div>
+    <div class="hidden" id="comment_popup">
+
+
+        <div class="comment-header">
+            <h4 class="center-text size-full" style="margin:0;padding-top: 1em;padding-bottom: 1em;">Commentaire</h4>
+            <textarea style="width: 98%;" placeholder="..." id="create_comment_contenu"></textarea>
+            <div class="flex-column">
+                <input type="text" id="create_comment_nom" placeholder="Nom">
+                <input type="text" id="create_comment_prenom" placeholder="Prenom">
+                <input type="text" id="create_comment_email" placeholder="Email">
+            </div>
+            <button class="size-full" onclick="AddComment(this)" id="add_comment_button">Ajouter</button>
+        </div>
+
+
+
+        <div class="comment-container" id="comment_container">
+
         </div>
     </div>
 </body>

@@ -1,3 +1,9 @@
+function HideModifPopup()
+{
+    document.getElementById('modif_popup').className = 'hidden';
+    document.getElementById('comment_popup').className = 'hidden';
+}
+
 // --------------------------------------------
 // --- Utils ---
 // --------------------------------------------
@@ -43,7 +49,8 @@ function AddNewTask(button)
             prenom: auteur_prenom.value || "",
             email: auteur_email.value || ""
         },
-        etiquettes: []
+        etiquettes: [],
+        commentaires: []
     };
 
     for (var i = 0; i < label_container.children.length; i++) {
@@ -80,6 +87,9 @@ function OpenModifPopup(id)
     document.getElementById('create_popup').className = 'hidden';
 
     const button = document.getElementById('modif_button').value = id;
+    const delete_button = document.getElementById('delete_button').value = id;
+    const add_comment_button = document.getElementById('add_comment_button').value = id;
+
     const titre = document.getElementById('modif_titre');
     const description = document.getElementById('modif_description');
     const echeance = document.getElementById('modif_echeance');
@@ -91,10 +101,16 @@ function OpenModifPopup(id)
     const auteur_email = document.getElementById('modif_auteur_email');
     const label_container = document.getElementById('modif_label_container');
 
+    document.getElementById('create_comment_contenu').value = "";
+    document.getElementById('create_comment_nom').value = "";
+    document.getElementById('create_comment_prenom').value = "";
+    document.getElementById('create_comment_email').value = "";
+
 
     fetch('http://localhost:3000/tasks/' + id)
     .then(response => response.json())
     .then(data => {
+
         titre.value = data.titre;
         description.value = data.description;
         echeance.value = FormatteDateInput(data.echeance);
@@ -104,7 +120,28 @@ function OpenModifPopup(id)
         auteur_nom.value = data.auteur.nom;
         auteur_prenom.value = data.auteur.prenom;
         auteur_email.value = data.auteur.email;
-        document.getElementById('modif_popup').className = 'popup';
+        document.getElementById('modif_popup').className = 'popup-modif';
+        document.getElementById('comment_popup').className = 'popup-comment';
+
+        document.getElementById('comment_container').innerHTML = '';
+
+        data.commentaires.forEach(commentaire => {
+            const div = document.createElement('div');
+            div.className = 'comment';
+            div.innerHTML = `
+                <p style="margin: 0;margin-top: 1em;">${commentaire.contenu}</p>
+                <div class="flex-row flex-right size-full m-y-demi">
+                    <div>
+                        <p style="margin: 0;margin-right: 3%;text-align: right;">${commentaire.auteur.nom}</p>
+                        <p style="margin: 0;margin-right: 3%;text-align: right;">${commentaire.auteur.prenom}</p>
+                        <p style="margin: 0;margin-right: 3%;text-align: right;">${commentaire.auteur.email}</p>
+                    </div>
+                </div>
+                <p style="margin: 0;">${FormatteDate(commentaire.date)}</p>
+                <button style="margin: 0;margin-top: 1em;" onclick="DeleteComment({task : '${id}', comment : '${commentaire._id}'})" id="delete_button_comment">Supprimer</button>
+            `;
+            document.getElementById('comment_container').appendChild(div);
+        });
     });
 }
 
@@ -155,10 +192,85 @@ function ModifTask(button)
         }
         else {
             document.getElementById('modif_popup').className = 'hidden';
+            document.getElementById('comment_popup').className = 'hidden';
             FetchAllTasks();
         }
         return;
     })
+}
+
+function DeleteTask(button)
+{
+    fetch('http://localhost:3000/tasks/' + button.value, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        else {
+            document.getElementById('modif_popup').className = 'hidden';
+            FetchAllTasks();
+        }
+        return; 
+    });
+}
+
+function AddComment(button)
+{
+    const body = {
+        contenu: document.getElementById('create_comment_contenu').value,
+        auteur: {
+            nom: document.getElementById('create_comment_nom').value,
+            prenom: document.getElementById('create_comment_prenom').value,
+            email: document.getElementById('create_comment_email').value
+        }
+    }
+
+    fetch('http://localhost:3000/tasks/' + button.value + '/comment', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        else {
+            document.getElementById('modif_popup').className = 'hidden';
+            document.getElementById('comment_popup').className = 'hidden';
+            FetchAllTasks();
+            OpenModifPopup(button.value);
+        }
+        return; 
+    });
+}
+
+function DeleteComment(ids)
+{
+    fetch('http://localhost:3000/tasks/' + ids.task + "/comment/" + ids.comment, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        else {
+            document.getElementById('modif_popup').className = 'hidden';
+            document.getElementById('comment_popup').className = 'hidden';
+            FetchAllTasks();
+            OpenModifPopup(ids.task);
+        }
+        return; 
+    });
 }
 
 // --------------------------------------------
@@ -178,13 +290,19 @@ function DisplayTasks(task)
     
     let div = document.createElement('div');
 
+    let etiquettesP = "";
+
+    task.etiquettes.forEach(etiquettes => {
+        etiquettesP += `<p class="m-0" style="border: 1px solid #AAA; padding: 0.5em; border-radius: 0.3em;">${etiquettes}</p>`;
+    });
+
 
     div.innerHTML = `<div class="task" onclick="OpenModifPopup('${task._id}')">
                         <div class="task_head">
                             <div class="m-demi m-y-1">
                                 <h3 class="center-text m-0">${task.titre}</h3>
                             </div>
-                            <div class="m-demi" style="max-height: 4em; overflow-y: auto; border: 1px solid #AAA; padding: 0.5em; border-radius: 0.5em;">
+                            <div class="m-demi" style="height: 4em; overflow-y: auto; border: 1px solid #AAA; padding: 0.5em; border-radius: 0.5em;">
                                 <p class="m-0">${task.description}</p>
                             </div>
                             <div class="m-demi m-y-1">
@@ -232,6 +350,12 @@ function DisplayTasks(task)
                                 ${FormatteDate(task.echeance)}
                             </p>
                         </div>
+                        <p class="m-0 m-t-1">
+                            Etiquettes:
+                        </p>
+                        <div class="m-t-1 flex-col" style="overflow: auto; height: 3em; border: 1px solid #AAA;">
+                            ${etiquettesP}
+                        </div>
                     </div>`;
 
     taskDiv.appendChild(div);
@@ -258,7 +382,6 @@ function FetchAllTasks()
 
 function MinusLabelTask(button)
 {
-    console.log(button.parentElement.parentElement)
     const div = button.parentElement.parentElement;
     button.parentElement.remove();
         
