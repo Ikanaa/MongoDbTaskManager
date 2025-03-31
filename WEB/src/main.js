@@ -373,6 +373,9 @@ function FetchAllTasks()
     const date = document.getElementById("filtre_date")
     const q = document.getElementById("filtre_q")
 
+    const tri = document.getElementById("tri")
+    const ordre = document.getElementById("ordre")
+
     if (!status || !priorite || !categorie || !label || !avant_apres || !date || !q) {
         setTimeout(() => {
             FetchAllTasks();
@@ -387,8 +390,9 @@ function FetchAllTasks()
         (categorie.value ? 'categorie=' + categorie.value : '') + '&' +
         (label.value ? 'etiquette=' + label.value : '') + '&' +
         (date.value ? avant_apres.value + '=' + date.value : '') + '&' +
-        (q.value ? 'q=' + q.value : '');
-
+        (q.value ? 'q=' + q.value : '') + '&' +
+        (tri.value ? 'tri=' + tri.value : '') + '&' +
+        (ordre.value ? 'ordre=' + ordre.value : '');
 
     fetch(url)
         .then(response => response.json())

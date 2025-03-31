@@ -113,7 +113,7 @@ app.get('/tasks', async (req, res) => {
             sortOption = { dateCreation: 1 };
         }
         
-        const tasks = await Task.find(filter);
+        const tasks = await Task.find(filter).sort(sortOption);
         res.json(tasks);
     } catch (error) {
         res.status(500).json({ message: error.message });

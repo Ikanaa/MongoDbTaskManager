@@ -51,6 +51,19 @@
                 <p class="m-demi">Recherche textuel</p>
                 <input type="text" id="filtre_q" value="" onchange="FetchAllTasks()">
             </div>
+            <div class="flex-row">
+                <p class="m-demi">Trier par</p>
+                <select id="tri" onchange="FetchAllTasks()">
+                    <option value="">Aucun</option>
+                    <option value="echeance">Écheance</option>
+                    <option value="priorite">Priorité</option>
+                    <option value="dateCreation">Date Creation</option>
+                </select>
+                <select id="ordre" onchange="FetchAllTasks()">
+                    <option value="asc">Ascendant</option>
+                    <option value="desc">Descendant</option>
+                </select>
+            </div>
         </div>
     </div>
     <div class="flex-row">
