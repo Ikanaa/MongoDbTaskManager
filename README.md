@@ -6,25 +6,25 @@
 
 #### Prérequis :
 
-[Installer Docker](https://docs.docker.com/desktop/setup/install/windows-install/)
-Confirmer que docker tourne en tache de fond.
+- [Installer Docker](https://docs.docker.com/desktop/setup/install/windows-install/)
+- Confirmer que docker tourne en tache de fond.
 
 #### Commandes :
 
-Se placer dans le répertoire principal, puis exécuter :
+- Se placer dans le répertoire principal, puis exécuter :
 ```sh
 docker compose build | docker compose up -d
 ```
 
-Pour kill le docker : 
+- Pour kill le docker : 
 ```sh
 docker compose down
 ```
 #### Liens : 
 
-[Web Interface](http://localhost:80/)
-[API REST](http://localhost:3000/)
-[Port MongoDB](http://localhost:27017/) (pour valider que la bdd fonctionne)
+- [Web Interface](http://localhost:80/)
+- [API REST](http://localhost:3000/)
+- [Port MongoDB](http://localhost:27017/) (pour valider que la bdd fonctionne)
 
 # Consigne du TP
 ### MongoDB Task Manager - Schéma de données
