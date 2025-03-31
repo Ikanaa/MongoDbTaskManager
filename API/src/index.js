@@ -57,7 +57,6 @@ app.get('/', (req, res) => {
 app.get('/tasks', async (req, res) => {
     try {
         const filter = {};
-        console.log(req.query);
         
         // Apply status filter
         if (req.query.statut) {

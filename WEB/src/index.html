@@ -13,6 +13,46 @@
         <button onclick="document.getElementById('create_popup').className = 'popup';document.getElementById('modif_popup').className = 'hidden';
         document.getElementById('comment_popup').className = 'hidden';">Créer Tache</button>
     </div>
+    <div class="flex-column">
+        <div class="flex-row">
+                <h4 class="m-demi">Filtre Taches</h2>
+
+                <p class="m-demi">Status</p>
+                <select id="filtre_status" onchange="FetchAllTasks()">
+                    <option value="">Aucun</option>
+                    <option value="à faire">À faire</option>
+                    <option value="en cours">En cours</option>
+                    <option value="terminée">Terminée</option>
+                    <option value="annulée">Annulée</option>
+                </select>
+
+                <p class="m-demi">Priorité</p>
+                <select id="filtre_priorite" onchange="FetchAllTasks()">
+                    <option value="">Aucun</option>
+                    <option value="basse">Basse</option>
+                    <option value="moyenne">Moyenne</option>
+                    <option value="haute">Haute</option>
+                    <option value="critique">Critique</option>
+                </select>
+
+                <p class="m-demi">Categorie</p>
+                <input type="text" id="filtre_categorie" placeholder="Travail" value="" onchange="FetchAllTasks()">
+
+                <p class="m-demi">Etiquettes</p>
+                <input type="text" id="filtre_label" value="" onchange="FetchAllTasks()">
+
+                <p class="m-demi">Date</p>
+                <select id="filtre_avant_apres" onchange="FetchAllTasks()">
+                    <option value="avant">Avant</option>
+                    <option value="apres">Après</option>
+                </select>
+                <input type="date" id="filtre_date" value="" onchange="FetchAllTasks()">
+
+                <p class="m-demi">Recherche textuel</p>
+                <input type="text" id="filtre_q" value="" onchange="FetchAllTasks()">
+            </div>
+        </div>
+    </div>
     <div class="flex-row">
         <div>
             <div class="size-a block" id="task_container">

@@ -365,7 +365,32 @@ function FetchAllTasks()
 {
     ClearDisplayTasks();
 
-    fetch('http://localhost:3000/tasks')
+    const status = document.getElementById("filtre_status")
+    const priorite = document.getElementById("filtre_priorite")
+    const categorie = document.getElementById("filtre_categorie")
+    const label = document.getElementById("filtre_label")
+    const avant_apres = document.getElementById("filtre_avant_apres")
+    const date = document.getElementById("filtre_date")
+    const q = document.getElementById("filtre_q")
+
+    if (!status || !priorite || !categorie || !label || !avant_apres || !date || !q) {
+        setTimeout(() => {
+            FetchAllTasks();
+        }, 1);
+        return;
+    }
+
+
+    const url = 'http://localhost:3000/tasks?' + 
+        (status.value ? 'statut=' + status.value : '') + '&' +
+        (priorite.value ? 'priorite=' + priorite.value : '') + '&' +
+        (categorie.value ? 'categorie=' + categorie.value : '') + '&' +
+        (label.value ? 'etiquette=' + label.value : '') + '&' +
+        (date.value ? avant_apres.value + '=' + date.value : '') + '&' +
+        (q.value ? 'q=' + q.value : '');
+
+
+    fetch(url)
         .then(response => response.json())
         .then(data => {
             data.forEach(task => {
