@@ -53,10 +53,68 @@ app.get('/', (req, res) => {
     res.send('Task Manager API is running');
 });
 
-// Get all tasks
+// Get all tasks with optional filters
 app.get('/tasks', async (req, res) => {
     try {
-        const tasks = await Task.find();
+        const filter = {};
+        console.log(req.query);
+        
+        // Apply status filter
+        if (req.query.statut) {
+            filter.status = req.query.statut;
+        }
+        
+        // Apply priority filter
+        if (req.query.priorite) {
+            filter.priorite = req.query.priorite;
+        }
+        
+        // Apply category filter
+        if (req.query.categorie) {
+            filter.categorie = req.query.categorie;
+        }
+        
+        // Apply tag filter
+        if (req.query.etiquette) {
+            filter.etiquettes = { $in: [req.query.etiquette] };
+        }
+        
+        // Apply due date filters
+        if (req.query.avant) {
+            filter.echeance = { ...filter.echeance, $lte: new Date(req.query.avant) };
+        }
+        
+        if (req.query.apres) {
+            filter.echeance = { ...filter.echeance, $gte: new Date(req.query.apres) };
+        }
+        
+        // Apply text search
+        if (req.query.q) {
+            filter.$or = [
+                { titre: { $regex: req.query.q, $options: 'i' } },
+                { description: { $regex: req.query.q, $options: 'i' } }
+            ];
+        }
+        
+        // Apply sorting
+        let sortOption = {};
+        if (req.query.tri) {
+            // Validate sort field is one of the allowed options
+            const allowedSortFields = ['echeance', 'priorite', 'dateCreation'];
+            const sortField = allowedSortFields.includes(req.query.tri) ? req.query.tri : 'dateCreation';
+            
+            // Check if descending order is requested
+            const sortOrder = req.query.ordre === 'desc' ? -1 : 1;
+            
+            sortOption[sortField] = sortOrder;
+        }
+
+        // If no sort specified, default to creation date ascending
+        if (Object.keys(sortOption).length === 0) {
+            sortOption = { dateCreation: 1 };
+        }
+        
+        const tasks = await Task.find(filter);
         res.json(tasks);
     } catch (error) {
         res.status(500).json({ message: error.message });
@@ -73,6 +131,7 @@ app.get('/tasks/:id', async (req, res) => {
         res.status(500).json({ message: error.message });
     }
 });
+
 
 // Create task
 app.post('/tasks', async (req, res) => {
