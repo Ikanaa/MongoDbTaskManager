@@ -1,7 +1,3 @@
----
-print_background: true
----
-
 # MongoDB Task Manager
 
 **Une application Web avec support MongoDB pour gérer des tâches ! 📋**
