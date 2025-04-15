@@ -2,23 +2,23 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
-// Initialize the app
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// MongoDB Connection
+
 // mongodb://localhost:27017
 const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/taskmanager';
 mongoose.connect(MONGODB_URI)
     .then(() => console.log('Connected to MongoDB'))
     .catch(err => console.error('MongoDB connection error:', err));
 
-// Define Task Schema
+
 const taskSchema = new mongoose.Schema({
     titre: { type: String, required: true },
     description: { type: String },
@@ -48,37 +48,37 @@ const taskSchema = new mongoose.Schema({
 
 const Task = mongoose.model('Task', taskSchema);
 
-// Routes
+
 app.get('/', (req, res) => {
     res.send('Task Manager API is running');
 });
 
-// Get all tasks with optional filters
+
 app.get('/tasks', async (req, res) => {
     try {
         const filter = {};
         
-        // Apply status filter
+        //  status filter
         if (req.query.statut) {
             filter.status = req.query.statut;
         }
         
-        // Apply priority filter
+        //  priority filter
         if (req.query.priorite) {
             filter.priorite = req.query.priorite;
         }
         
-        // Apply category filter
+        //  category filter
         if (req.query.categorie) {
             filter.categorie = req.query.categorie;
         }
         
-        // Apply tag filter
+        //  tag filter
         if (req.query.etiquette) {
             filter.etiquettes = { $in: [req.query.etiquette] };
         }
         
-        // Apply due date filters
+        //  due date filters
         if (req.query.avant) {
             filter.echeance = { ...filter.echeance, $lte: new Date(req.query.avant) };
         }
@@ -87,7 +87,7 @@ app.get('/tasks', async (req, res) => {
             filter.echeance = { ...filter.echeance, $gte: new Date(req.query.apres) };
         }
         
-        // Apply text search
+        //  text search
         if (req.query.q) {
             filter.$or = [
                 { titre: { $regex: req.query.q, $options: 'i' } },
@@ -95,20 +95,19 @@ app.get('/tasks', async (req, res) => {
             ];
         }
         
-        // Apply sorting
+        //  sorting
         let sortOption = {};
         if (req.query.tri) {
-            // Validate sort field is one of the allowed options
             const allowedSortFields = ['echeance', 'priorite', 'dateCreation'];
             const sortField = allowedSortFields.includes(req.query.tri) ? req.query.tri : 'dateCreation';
             
-            // Check if descending order is requested
+            // Check descending order
             const sortOrder = req.query.ordre === 'desc' ? -1 : 1;
             
             sortOption[sortField] = sortOrder;
         }
 
-        // If no sort specified, default to creation date ascending
+        // default creation date ascending
         if (Object.keys(sortOption).length === 0) {
             sortOption = { dateCreation: 1 };
         }
@@ -120,7 +119,7 @@ app.get('/tasks', async (req, res) => {
     }
 });
 
-// Get task by ID
+
 app.get('/tasks/:id', async (req, res) => {
     try {
         const task = await Task.findById(req.params.id);
@@ -132,7 +131,7 @@ app.get('/tasks/:id', async (req, res) => {
 });
 
 
-// Create task
+
 app.post('/tasks', async (req, res) => {
     try {
         const task = new Task(req.body);
@@ -143,7 +142,7 @@ app.post('/tasks', async (req, res) => {
     }
 });
 
-// Update task
+
 app.put('/tasks/:id', async (req, res) => {
     try {
         const task = await Task.findByIdAndUpdate(
@@ -158,7 +157,7 @@ app.put('/tasks/:id', async (req, res) => {
     }
 });
 
-// Add Comment to Task
+
 app.post('/tasks/:id/comment', async (req, res) => {
     try {
         const task = await Task.findById(req.params.id);
@@ -172,7 +171,7 @@ app.post('/tasks/:id/comment', async (req, res) => {
     }
 });
 
-// Delete task
+
 app.delete('/tasks/:id', async (req, res) => {
     try {
         const task = await Task.findByIdAndDelete(req.params.id);
@@ -183,7 +182,7 @@ app.delete('/tasks/:id', async (req, res) => {
     }
 });
 
-// Delete comment from task
+
 app.delete('/tasks/:taskId/comment/:commentId', async (req, res) => {
     try {
         const task = await Task.findById(req.params.taskId);
@@ -199,13 +198,13 @@ app.delete('/tasks/:taskId/comment/:commentId', async (req, res) => {
     }
 });
 
-// Error handler
+
 app.use((err, req, res, next) => {
     console.error(err.stack);
     res.status(500).json({ message: 'Something went wrong!' });
 });
 
-// Start server
+
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT} http://localhost:${PORT}`);
 });
